@@ -150,6 +150,10 @@
     <ClCompile Include="Source\injector\Injection.cpp" />
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="license.txt" />
+    <None Include="readme.md" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
