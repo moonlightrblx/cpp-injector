@@ -113,11 +113,9 @@ namespace encrypt
 #define _(str) ([] { return std::string(encrypt(str).decrypt()); })()  // returns std::string
 #define _C(str) ([] { return encrypt(str).decrypt(); })()  // returns char*
 #define OBF(str) ([] { return encrypt2(str).decrypt(); })()  // returns char*
-// we do it in a lambada to avoid having to call .decrypt a shit load and overal just makes src cleaner
 
 #define _cat(str) encrypt(str);
 
-// i wanna fucking die :3
 // new: added pointer encryption because we're not retarded <3
 #define enc_ptr(ptr) encrypt_key(reinterpret_cast<const char*>(&ptr), RANDOM_KEY12, RANDOM_KEY22)
 #define dec_ptr(encrypted) reinterpret_cast<uintptr_t>(encrypted.decrypt())
