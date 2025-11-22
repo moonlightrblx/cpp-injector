@@ -12,17 +12,16 @@ A modern, research-oriented manual map injector, built as a secure and improved 
 
 - **Fully manual PE mapping**
   - Import resolution, relocations, TLS, entry execution.
-- **Rewritten architecture**
-  - Cleaner pipeline, safer state validation, clearer structure.
 - **Custom shellcode**
   - Optimized internal stubs for relocation, import fixing, and memory preparation.
-- **Syscall‑based internal routines**
-  - Uses documented syscall structures instead of standard API wrappers.
 - **Improved diagnostics**
   - Detailed logging for understanding mapping flow and debugging failures.
 - **Safer design**
   - Additional checks for target process access, PE consistency, memory safety.
-
+- **LoadLibrary Injection**
+  - Direct injection with LoadLibraryA
+- **Manual Mapping**
+  - Manual Map the injection
 > ⚠️ Still not “perfect,” but significantly more robust than the original injector it’s based on.
 
 ---
