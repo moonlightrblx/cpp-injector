@@ -33,7 +33,8 @@ inline NtReadVirtualMemory_t NtReadVirtualMemory;
 inline NtCreateThreadEx_t NtCreateThreadEx;
 class CInjector {
 public:
-    bool ManualMap(HANDLE Process, const std::string& DllPath);
+    bool _ManualMap(HANDLE Process, const std::string& DllPath);
+    bool _LoadLibrary(HANDLE Process, const std::string& DllPath);
 
     using LoadLibraryFunc = HINSTANCE(WINAPI*)(const char* LibFileName);
     using GetProcAddressFunc = FARPROC(WINAPI*)(HMODULE Module, const char* ProcName);
@@ -45,10 +46,11 @@ public:
         GetProcAddressFunc GetProcAddress;
         HINSTANCE ModuleHandle;
     };
+
     __forceinline bool ApplyStealth(HANDLE Process, BYTE* RemoteBase, void* RemoteShellcode, uintptr_t DllBase);
 private:
     static void WINAPI Shellcode(LPVOID DataPtr);
     bool Stealth = true;
 };
 
-inline auto Injector = std::make_unique<CInjector>();
+inline auto injector = std::make_unique<CInjector>();

@@ -5,9 +5,11 @@
 #include <iomanip>
 #include <random>
 #include <sstream>
-#include "injector/Injection.hpp"
+#include "lib/Injection.hpp"
 #include <sdk/includes.h>
 #include <TlHelp32.h>
+
+
 /*
 //! injector created by ellii <3
 //! based on https://github.com/TheCruZ/Simple-Manual-Map-Injector/blob/master/Manual%20Map%20Injector/injector.cpp
@@ -41,8 +43,26 @@ namespace windows{
         }
         return pid;
     }
+    typedef NTSTATUS(NTAPI* NtOpenProcess_t)(PHANDLE, ACCESS_MASK, POBJECT_ATTRIBUTES, CLIENT_ID*);
+
     __forceinline HANDLE OpenHandle(DWORD pid) {
-        return OpenProcess(PROCESS_ALL_ACCESS, FALSE, pid);
+        NtOpenProcess_t NtOpenProcess = (NtOpenProcess_t)GetProcAddress(GetModuleHandleA("ntdll.dll"), "NtOpenProcess");
+        // might make this a direct syscall soon idk 🤷‍
+        if (!NtOpenProcess) {
+            std::cout << "[-] failed to get NtOpenProcess!";
+            return nullptr;
+        }
+        HANDLE handle = nullptr;
+        CLIENT_ID cid;
+        cid.UniqueProcess = (HANDLE)pid;
+        cid.UniqueThread = nullptr;
+
+        OBJECT_ATTRIBUTES objAttr = {};
+        objAttr.Length = sizeof(OBJECT_ATTRIBUTES);
+
+        NtOpenProcess(&handle, PROCESS_ALL_ACCESS , &objAttr, &cid);
+      
+        return handle;
     }
 
 }
@@ -72,7 +92,7 @@ int main(int argc, char* argv[]) {
     if (!std::filesystem::exists(dllPath)) {
         con.print("dll path does not exist.", 1);
         con.print("usage : injector.exe <full path to dll> <process>", 1);
-        system("pause > nul");
+        std::cin.get();
         exit(1);
     }
 
@@ -82,14 +102,14 @@ int main(int argc, char* argv[]) {
         targetProcess = argv[2];
     }
     else {
-        targetProcess = "cs2.exe"; //! temporary process name
+        targetProcess = "cs2.exe";
     }
 
     DWORD pid = windows::get_pid(targetProcess);
-
+   
     if (pid == 0) {
         con.print("couldn't find process.", 1);
-        system("pause > nul");
+        std::cin.get();
         exit(1);
     }
 
@@ -99,11 +119,11 @@ int main(int argc, char* argv[]) {
 
     con.printf("cs2.exe handle : 0x%p", 0, handle);
 
-    if (!Injector->ManualMap(handle, dllPath.c_str()))
+    if (!injector->_ManualMap(handle, dllPath.c_str()))
         con.print("injection failed.", 1);
 
     std::cout << "press any key to exit..." << std::endl;
-    system("pause > nul");
-
-
+    std::cin.get();
+    /*system("pause > nul");*/
+	return 0;
 }

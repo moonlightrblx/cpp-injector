@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\injector\Injection.hpp">
+    <ClInclude Include="Source\lib\Injection.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\sdk\custom\console.h">
@@ -33,7 +33,7 @@
     <ClInclude Include="Source\sdk\custom\prot\xor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\sdk\custom\patch\patcher.h">
+    <ClInclude Include="Source\hijack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -41,7 +41,7 @@
     <ClCompile Include="Source\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\injector\Injection.cpp">
+    <ClCompile Include="Source\lib\Injection.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

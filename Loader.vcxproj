@@ -138,16 +138,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="Source\injector\Injection.hpp" />
+    <ClInclude Include="Source\hijack.h" />
+    <ClInclude Include="Source\lib\Injection.hpp" />
     <ClInclude Include="Source\sdk\cfg.h" />
     <ClInclude Include="Source\sdk\custom\console.h" />
     <ClInclude Include="Source\sdk\custom\custom.h" />
-    <ClInclude Include="Source\sdk\custom\patch\patcher.h" />
     <ClInclude Include="Source\sdk\custom\prot\xor.h" />
     <ClInclude Include="Source\sdk\includes.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\injector\Injection.cpp" />
+    <ClCompile Include="Source\lib\Injection.cpp" />
     <ClCompile Include="Source\main.cpp" />
   </ItemGroup>
   <ItemGroup>
