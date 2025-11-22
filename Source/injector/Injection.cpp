@@ -7,13 +7,6 @@
 #define RELOC_FLAG(RelInfo) ((RelInfo >> 12) == IMAGE_REL_BASED_DIR64)
 
 
-__forceinline uintptr_t random_syscall() {
-    // generate random address to impose as a syscall address
-    std::random_device rd;
-    std::mt19937_64 eng(rd());
-    std::uniform_int_distribution<uintptr_t> distr(0x10000000, 0x7FFFFFFFFFFF);
-    return distr(eng);
-}
 //__forceinline std::string random_syscall_name() {
 //    // generate random syscall name
 //      was used for testing imports but no longer needed <3
