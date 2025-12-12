@@ -117,7 +117,7 @@ int main(int argc, char* argv[]) {
 
     auto handle = windows::OpenHandle(pid);
 
-    con.printf("cs2.exe handle : 0x%p", 0, handle);
+    con.printf("window handle : 0x%p", 0, handle);
 
     if (!injector->_ManualMap(handle, dllPath.c_str()))
         con.print("injection failed.", 1);

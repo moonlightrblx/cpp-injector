@@ -1,1 +1,1 @@
-injector.exe "test dll.dll" RobloxPlayerBeta.exe
+injector.exe "test dll.dll" notepad.exe
