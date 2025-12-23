@@ -1,6 +1,9 @@
 ﻿#pragma once
+#include <windows.h>
 #include <TlHelp32.h>
-
+#include "custom.h"
+#include <winternl.h>
+#include <iostream>
 namespace windows {
     __forceinline DWORD get_pid(LPCTSTR processName) {
         DWORD pid = 0;

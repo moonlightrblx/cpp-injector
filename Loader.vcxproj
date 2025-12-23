@@ -144,7 +144,7 @@
     <ClInclude Include="src\sdk\custom\console.h" />
     <ClInclude Include="src\sdk\custom\custom.h" />
     <ClInclude Include="src\sdk\custom\prot\xor.h" />
-    <ClInclude Include="src\sdk\custom\windows.h" />
+    <ClInclude Include="src\sdk\custom\win.h" />
     <ClInclude Include="src\sdk\includes.h" />
   </ItemGroup>
   <ItemGroup>
