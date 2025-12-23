@@ -72,9 +72,9 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <OutDir>$(SolutionDir)Build\</OutDir>
-    <IncludePath>$(ProjectDir)Source\Miscellaneous\;$(ProjectDir)Source\;$(IncludePath)</IncludePath>
-    <IntDir>$(SolutionDir)Intermediates/L_Intermediates</IntDir>
+    <OutDir>.\build</OutDir>
+    <IntDir>.\build\trash</IntDir>
+    <IncludePath>src;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -139,16 +139,17 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClInclude Include="Source\hijack.h" />
-    <ClInclude Include="Source\lib\Injection.hpp" />
-    <ClInclude Include="Source\sdk\cfg.h" />
-    <ClInclude Include="Source\sdk\custom\console.h" />
-    <ClInclude Include="Source\sdk\custom\custom.h" />
-    <ClInclude Include="Source\sdk\custom\prot\xor.h" />
-    <ClInclude Include="Source\sdk\includes.h" />
+    <ClInclude Include="src\lib\inject.hpp" />
+    <ClInclude Include="src\sdk\cfg.h" />
+    <ClInclude Include="src\sdk\custom\console.h" />
+    <ClInclude Include="src\sdk\custom\custom.h" />
+    <ClInclude Include="src\sdk\custom\prot\xor.h" />
+    <ClInclude Include="src\sdk\custom\windows.h" />
+    <ClInclude Include="src\sdk\includes.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\lib\Injection.cpp" />
-    <ClCompile Include="Source\main.cpp" />
+    <ClCompile Include="src\lib\inject.cpp" />
+    <ClCompile Include="src\main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="license.txt" />

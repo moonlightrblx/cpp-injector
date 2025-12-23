@@ -1,4 +1,4 @@
-﻿#include "Injection.hpp"
+﻿#include "inject.hpp"
 #include <iostream>
 #include <sdk/custom/custom.h>
 #include <thread>
@@ -18,7 +18,25 @@ __forceinline void log(const char* format, ...)
     }
 }
 
-bool CInjector::_ManualMap(HANDLE Process, const std::string& DllPath) {
+bool c_injector::inject(HANDLE Proccess, const std::string& DllPath, e_injection_method inj_type)
+{
+    if (inj_type == INJ_METHOD_LOADLIBRARY) {
+        return loadlibrary(Proccess, DllPath);
+    }
+    else if (inj_type == INJ_METHOD_MANUALMAP) {
+        return manual_map(Proccess, DllPath);
+	}
+    else {
+        log("[-] invalid injection method!\n");
+		return false;
+    }
+    // should never reach this?
+    // if it does theres some serious issues.
+
+    return false;
+}
+
+bool c_injector::manual_map(HANDLE Process, const std::string& DllPath) {
     std::ifstream dllfile(DllPath, std::ios::binary | std::ios::ate);
 
     if (!dllfile.is_open()) {
@@ -104,7 +122,8 @@ bool CInjector::_ManualMap(HANDLE Process, const std::string& DllPath) {
         return false;
     }
 
-    if (!WriteProcessMemory(Process, RemoteShellcode, Shellcode, 0x1000, nullptr)) {
+    // fire method trust
+    if (!WriteProcessMemory(Process, RemoteShellcode, shellcode, 0x1000, nullptr)) {
         NtFreeVirtualMemory(Process, reinterpret_cast<PVOID*>(&RemoteBase), 0, MEM_RELEASE);
         NtFreeVirtualMemory(Process, reinterpret_cast<PVOID*>(&RemoteShellcode), 0, MEM_RELEASE);
         return false;
@@ -146,7 +165,7 @@ bool CInjector::_ManualMap(HANDLE Process, const std::string& DllPath) {
 
     if (Stealth) {
         uintptr_t CheckModuleAddr = reinterpret_cast<uintptr_t>(CheckModule);
-        ApplyStealth(Process, RemoteBase, RemoteShellcode, CheckModuleAddr);
+        apply_stealth(Process, RemoteBase, RemoteShellcode, CheckModuleAddr);
     }
 
     log("injection successful!\n");
@@ -154,7 +173,8 @@ bool CInjector::_ManualMap(HANDLE Process, const std::string& DllPath) {
     return true;
 }
 
-bool CInjector::_LoadLibrary(HANDLE Process, const std::string& DllPath) {
+bool c_injector::loadlibrary(HANDLE Process, const std::string& DllPath) {
+    // todo: switch to dynamic syscalls and add stealth :)
     std::ifstream file(DllPath, std::ios::binary | std::ios::ate);
     if (!file.is_open()) {
         log("[-] Failed to open DLL: %s\n", DllPath.c_str());
@@ -230,7 +250,7 @@ bool CInjector::_LoadLibrary(HANDLE Process, const std::string& DllPath) {
     return true;
 }
 
-bool CInjector::ApplyStealth(HANDLE Process, BYTE* RemoteBase, void* RemoteShellcode, uintptr_t DllBase) {
+bool c_injector::apply_stealth(HANDLE Process, BYTE* RemoteBase, void* RemoteShellcode, uintptr_t DllBase) {
     if (!Process || !RemoteBase || !RemoteShellcode) return false;
 
     log("=========== stealth ===========\n");
@@ -245,7 +265,7 @@ bool CInjector::ApplyStealth(HANDLE Process, BYTE* RemoteBase, void* RemoteShell
 
     return true;
 }
-void WINAPI CInjector::Shellcode(LPVOID dataptr) { 
+void WINAPI c_injector::shellcode(LPVOID dataptr) {
 	// we cant use our syscalls here since we dont have their addresses
     // i might just add them later tho
  
@@ -309,14 +329,14 @@ void WINAPI CInjector::Shellcode(LPVOID dataptr) {
                 else {
 					auto* Import = reinterpret_cast<IMAGE_IMPORT_BY_NAME*>(base + (*ThunkRef)); // get the import by name
 					*FuncRef = reinterpret_cast<ULONG_PTR>(GetProcAddress(Dll, Import->Name));  // get the proc address using the name
-					// could add error checking here but meh
                 }
             }
             ++ImportDesc;
         }
     }
 	
-    // tls
+    // tls 
+    // if im being honest the only reason i added this is because my packer uses tls callbacks to hide the entry point 🤑
     if (OptHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].Size) {
         auto* TLS = reinterpret_cast<IMAGE_TLS_DIRECTORY*>(base + OptHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_TLS].VirtualAddress);
         auto* Callback = reinterpret_cast<PIMAGE_TLS_CALLBACK*>(TLS->AddressOfCallBacks);
@@ -329,6 +349,9 @@ void WINAPI CInjector::Shellcode(LPVOID dataptr) {
 	
     // call entry point
     // might eventually spoof the call to this so the process doesn't get a huge flag
+    // just as a quick notice this does NOT create a new thread so the injector waits for this function to return. 
+    // if you do not create a thread inside of dllmain then i would immediately do that (unless its a detection on the AC (very possible))
+
     DllMain(base, DLL_PROCESS_ATTACH, nullptr);
 	data->ModuleHandle = reinterpret_cast<HINSTANCE>(base);
 }

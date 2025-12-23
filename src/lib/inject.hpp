@@ -31,15 +31,22 @@ inline NtAllocateVirtualMemory_t NtAllocateVirtualMemory;
 inline NtFreeVirtualMemory_t NtFreeVirtualMemory;
 inline NtReadVirtualMemory_t NtReadVirtualMemory;
 inline NtCreateThreadEx_t NtCreateThreadEx;
-class CInjector {
+
+//todo: clean this up :)
+enum e_injection_method {
+    INJ_METHOD_LOADLIBRARY,
+    INJ_METHOD_MANUALMAP
+};
+class c_injector {
 public:
-    bool _ManualMap(HANDLE Process, const std::string& DllPath);
-    bool _LoadLibrary(HANDLE Process, const std::string& DllPath);
+    bool inject(HANDLE Proccess, const std::string& DllPath, e_injection_method inj_type);
+	// might eventually make these private and just have a single inject function that takes in e_injection_method
+    bool manual_map(HANDLE Process, const std::string& DllPath);
+    bool loadlibrary(HANDLE Process, const std::string& DllPath);
 
     using LoadLibraryFunc = HINSTANCE(WINAPI*)(const char* LibFileName);
     using GetProcAddressFunc = FARPROC(WINAPI*)(HMODULE Module, const char* ProcName);
     using DllEntryPointFunc = BOOL(WINAPI*)(void* Module, DWORD Reason, void* Reserved);
-    // todo: add more syscalls also show the addresses of the syscalls <3
 
     struct MappingData {
         LoadLibraryFunc LoadLibraryA;
@@ -47,10 +54,10 @@ public:
         HINSTANCE ModuleHandle;
     };
 
-    __forceinline bool ApplyStealth(HANDLE Process, BYTE* RemoteBase, void* RemoteShellcode, uintptr_t DllBase);
 private:
-    static void WINAPI Shellcode(LPVOID DataPtr);
+    __forceinline bool apply_stealth(HANDLE Process, BYTE* RemoteBase, void* RemoteShellcode, uintptr_t DllBase);
+    static void WINAPI shellcode(LPVOID DataPtr);
     bool Stealth = true;
 };
 
-inline auto injector = std::make_unique<CInjector>();
+inline auto injector = std::make_unique<c_injector>();

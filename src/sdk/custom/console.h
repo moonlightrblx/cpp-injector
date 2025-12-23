@@ -126,7 +126,6 @@ public:
 	__forceinline void clear() {
 
 		std::cout << _C("\033[2J\033[H") << std::flush; // ascii clear screen
-		fade(logo);
 	}
 
 	__forceinline void print(const std::string& txt, int err = 0) {

@@ -15,33 +15,36 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Source\lib\Injection.hpp">
+    <ClInclude Include="src\lib\inject.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\sdk\custom\console.h">
+    <ClInclude Include="src\sdk\custom\console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\sdk\custom\custom.h">
+    <ClInclude Include="src\sdk\custom\custom.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\sdk\cfg.h">
+    <ClInclude Include="src\sdk\cfg.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\sdk\includes.h">
+    <ClInclude Include="src\sdk\includes.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Source\sdk\custom\prot\xor.h">
+    <ClInclude Include="src\sdk\custom\prot\xor.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Source\hijack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="src\sdk\custom\windows.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source\main.cpp">
+    <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Source\lib\Injection.cpp">
+    <ClCompile Include="src\lib\inject.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
